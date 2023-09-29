@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Aluno\\Documents\\trabalho-software\\InventarioRoupasAPI\\InventarioRoupasAPI.csproj": {}
+    "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Aluno\\Documents\\trabalho-software\\InventarioRoupasAPI\\InventarioRoupasAPI.csproj": {
+    "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Aluno\\Documents\\trabalho-software\\InventarioRoupasAPI\\InventarioRoupasAPI.csproj",
+        "projectUniqueName": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
         "projectName": "InventarioRoupasAPI",
-        "projectPath": "c:\\Users\\Aluno\\Documents\\trabalho-software\\InventarioRoupasAPI\\InventarioRoupasAPI.csproj",
-        "packagesPath": "C:\\Users\\Aluno\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Aluno\\Documents\\trabalho-software\\InventarioRoupasAPI\\obj\\",
+        "projectPath": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
+        "packagesPath": "C:\\Users\\gabri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\Aluno\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\gabri\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -49,9 +42,27 @@
               "target": "Package",
               "version": "[7.0.2, )"
             },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools.DotNet": {
+              "target": "Package",
+              "version": "[2.0.3, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -77,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
