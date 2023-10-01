@@ -2,18 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using APIInventario.Models;
-using APIInventario.Data;
+using APIStock.Models;
+using APIStock.Data;
 
-namespace APIInventario.Controllers
+namespace APIStock.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
   public class ProductController : ControllerBase
   {
-    private readonly InventarioDbContext _dbContext;
+    private readonly StockDbContext _dbContext;
 
-    public ProductController(InventarioDbContext dbContext)
+    public ProductController(StockDbContext dbContext)
     {
       _dbContext = dbContext;
     }

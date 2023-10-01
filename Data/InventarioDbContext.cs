@@ -1,9 +1,9 @@
-using APIInventario.Models;
+using APIStock.Models;
 using Microsoft.EntityFrameworkCore; // Necessário instalar
 
-namespace APIInventario.Data;
+namespace APIStock.Data;
 
-public class InventarioDbContext : DbContext
+public class StockDbContext : DbContext
 {
     public DbSet<Product>? Product { get; set; }
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace APIInventario.Models;
+namespace APIStock.Models;
 
 public class Shorts : Product
 {

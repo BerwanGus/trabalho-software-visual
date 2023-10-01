@@ -1,4 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
 
-using APIInventario.Models;
-using APIInventario.Data;
+using APIStock.Models;
+using APIStock.Data;
