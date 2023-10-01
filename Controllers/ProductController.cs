@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using APIStock.Models;
-using APIStock.Data;
+using API.Data;
 
 namespace APIStock.Controllers
 {
@@ -11,9 +11,9 @@ namespace APIStock.Controllers
   [ApiController]
   public class ProductController : ControllerBase
   {
-    private readonly StockDbContext _dbContext;
+    private readonly DBContext _dbContext;
 
-    public ProductController(StockDbContext dbContext)
+    public ProductController(DBContext dbContext)
     {
       _dbContext = dbContext;
     }
@@ -23,8 +23,8 @@ namespace APIStock.Controllers
     public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
     {
       if (_dbContext is null) return NotFound();
-      if (_dbContext.Product is null) return NotFound();
-      var product = await _dbContext.Product.ToListAsync();
+      if (_dbContext.Products is null) return NotFound();
+      var product = await _dbContext.Products.ToListAsync();
       return Ok(product);
     }
 
@@ -32,7 +32,7 @@ namespace APIStock.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> GetProduct(int id)
     {
-      var product = await _dbContext.Product.FindAsync(id);
+      var product = await _dbContext.Products.FindAsync(id);
 
       if (product == null)
       {
@@ -46,7 +46,7 @@ namespace APIStock.Controllers
     [HttpPost]
     public async Task<ActionResult<Product>> PostProduct(Product product)
     {
-      _dbContext.Product.Add(product);
+      _dbContext.Products.Add(product);
       await _dbContext.SaveChangesAsync();
 
       return CreatedAtAction("GetProduct", new { id = product.Id }, product);
@@ -86,13 +86,13 @@ namespace APIStock.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
-      var product = await _dbContext.Product.FindAsync(id);
+      var product = await _dbContext.Products.FindAsync(id);
       if (product == null)
       {
         return NotFound();
       }
 
-      _dbContext.Product.Remove(product);
+      _dbContext.Products.Remove(product);
       await _dbContext.SaveChangesAsync();
 
       return NoContent();
@@ -100,7 +100,7 @@ namespace APIStock.Controllers
 
     private bool ProductExists(int id)
     {
-      return _dbContext.Product.Any(e => e.Id == id);
+      return _dbContext.Products.Any(e => e.Id == id);
     }
   }
 }
