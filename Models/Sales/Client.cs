@@ -16,5 +16,9 @@ public class Client
     // ---- DEFAULT VALUE -> 0
     public required float Purchases_Quantity { get; set; }
 
-    public ICollection<Sale>? Sales { get; set; }
+    public ICollection<Sale>? Purchases { get; set; }
+
+    public Client(string id, string name, string cpf, DateTime register, float qtty, ICollection<Sale> sales) {
+        
+    }
 }

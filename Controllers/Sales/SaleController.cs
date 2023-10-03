@@ -3,12 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 
 using APISale.Models;
+using API.Controllers;
 
 namespace APISale.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class SaleController : ControllerBase
+  public class SaleController : Back2youControllerBase
   {
     private readonly DBContext _dbContext;
 
