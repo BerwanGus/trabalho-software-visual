@@ -48,51 +48,49 @@ namespace APISale.Controllers
     }
 
     // POST: api/Client
-    // [HttpPost]
-    // public async Task<ActionResult<Client>> PostClient(string name, string cpf)
-    // {
-    //   if (_dbContext is null) return NotFound();
-    //   if (_dbContext.Clients is null) return NotFound();
+    [HttpPost]
+    public async Task<ActionResult> PostClient(string name, string cpf)
+    {
+      if (_dbContext is null) return NotFound();
+      if (_dbContext.Clients is null) return NotFound();
 
-    //   string id = GetNewUuid();
-    //   DateTime datenow = DateTime.Now;
+      var client = new Client()
+      {
+        Id=GetNewUuid(),
+        Name=name,
+        Cpf=cpf,
+        Purchases_Quantity=0,
+        Register_Date=DateTime.Now,
+        Purchases=new List<Sale>(),
+      };
 
-    //   Client client = Client(id, name, cpf, datenow, 0, null);
+      _dbContext.Clients.Add(client);
+      await _dbContext.SaveChangesAsync();
 
-    //   _dbContext.Clients.Add(Client);
-    //   await _dbContext.SaveChangesAsync();
-
-    //   return CreatedAtAction("GetClient", new { id = Client.Id }, Client);
-    // }
+      return CreatedAtAction("GetClient", new { id = client.Id }, client);
+    }
 
     // PUT: api/Client/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutClient(string id, Client Client)
+    public async Task<IActionResult> PutClient(string id, string name, string cpf)
     {
-      if (id != Client.Id)
-      {
-        return BadRequest();
-      }
+      var new_client = _dbContext.Clients.Find(id);
 
-      _dbContext.Entry(Client).State = EntityState.Modified;
+      if(new_client == null) return NotFound();
 
+      new_client.Name = name;
+      new_client.Cpf = cpf;
+      
       try
       {
         await _dbContext.SaveChangesAsync();
       }
       catch (DbUpdateConcurrencyException)
       {
-        if (!ClientExists(id))
-        {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
+        throw;
       }
 
-      return NoContent();
+      return CreatedAtAction("Update Client", new { id = new_client.Id }, new_client);
     }
 
     // DELETE: api/Client/5
