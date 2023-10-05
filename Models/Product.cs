@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using API.Models;
 
 namespace APIStock.Models;
 
@@ -14,4 +15,6 @@ public class Product
     public float Price { get; set; }
     public string? Brand { get; set; }
     public string? Color { get; set; }
+
+    public virtual ICollection<ProductSale>? ProductSales {get; set; }
 }

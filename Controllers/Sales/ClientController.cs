@@ -27,36 +27,7 @@ namespace APISale.Controllers
     {
       var client = await _dbContext.Clients
                   .Include(c => c.Purchases)
-                  .Select(c => new {
-                    c.Id,
-                    c.Name,
-                    c.Cpf,
-                    c.Register_Date,
-                    c.Purchases_Quantity,
-                    Purchases= c.Purchases!.Select(s => new
-                    {
-                      s.Id,
-                      s.Sale_Date,
-                      s.Value,
-
-                      Seller = new {
-                        s.Seller.Id,
-                        s.Seller.Name,
-                        s.Seller.Cpf,
-                      },
-                      Client = new {
-                        s.Client.Id,
-                        s.Client.Name,
-                        s.Client.Cpf,
-                      },
-                      Event = new {
-                        s.Event.Id,
-                        s.Event.Name,
-                        s.Event.Event_Date,
-                        s.Event.Sales_Quantity
-                      }
-                    })
-                  })
+                  .Select(c => FixClientJSON(c))
                   .ToListAsync();
 
       return Ok(client);
@@ -72,37 +43,7 @@ namespace APISale.Controllers
         return NotFound();
       }
 
-      var client = new
-      {
-        c.Id,
-        c.Name,
-        c.Cpf,
-        c.Register_Date,
-        c.Purchases_Quantity,
-        Purchases= c.Purchases!.Select(s => new
-        {
-          s.Id,
-          s.Sale_Date,
-          s.Value,
-
-          Seller = new {
-            s.Seller.Id,
-            s.Seller.Name,
-            s.Seller.Cpf,
-          },
-          Client = new {
-            s.Client.Id,
-            s.Client.Name,
-            s.Client.Cpf,
-          },
-          Event = new {
-            s.Event.Id,
-            s.Event.Name,
-            s.Event.Event_Date,
-            s.Event.Sales_Quantity
-          }
-        })
-      };
+      var client = FixClientJSON(c);
 
       return Ok(client);
     }
@@ -198,6 +139,29 @@ namespace APISale.Controllers
     private bool ClientExists(string id)
     {
       return _dbContext.Clients!.Any(e => e.Id == id);
+    }
+  
+    private static object FixClientJSON(Client client)
+    {
+      var fixedClient = new
+      {
+        client.Id,
+        client.Name,
+        client.Cpf,
+        client.Register_Date,
+        client.Purchases_Quantity,
+        Purchases = client.Purchases?.Select(s => new
+        {
+          s.Id,
+          s.Sale_Date,
+          s.Value,
+          
+          s.Seller_Id,
+          s.Event_Id,
+        })
+      };
+
+      return fixedClient;
     }
   }
 }

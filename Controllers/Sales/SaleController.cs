@@ -10,6 +10,7 @@ using API.Controllers;
 using API.Dto;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using API.Models;
 
 namespace APISale.Controllers
 {
@@ -25,7 +26,6 @@ namespace APISale.Controllers
     }
 
     // GET: api/Sale
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Sale>>> GetSale()
     {
@@ -36,28 +36,8 @@ namespace APISale.Controllers
                         .Include(s => s.Client)
                         .Include(s => s.Event)
                         .Include(s => s.Seller)
-                        .Select(s => new {
-                          s.Id,
-                          s.Sale_Date,
-                          s.Value,
-
-                          Seller = new {
-                            s.Seller.Id,
-                            s.Seller.Name,
-                            s.Seller.Cpf,
-                          },
-                          Client = new {
-                            s.Client.Id,
-                            s.Client.Name,
-                            s.Client.Cpf,
-                          },
-                          Event = new {
-                            s.Event.Id,
-                            s.Event.Name,
-                            s.Event.Event_Date,
-                            s.Event.Sales_Quantity
-                          }
-                        })
+                        .Include(s => s.ProductSales)
+                        .Select(s => FixSaleJSON(s))
                         .ToListAsync();
 
       return Ok(sales);
@@ -67,24 +47,28 @@ namespace APISale.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<Sale>> GetSale(string id)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Sales is null) return NotFound();
+      var idSale = await _dbContext.Sales
+                  .Include(s => s.Client)
+                  .Include(s => s.Event)
+                  .Include(s => s.Seller)
+                  .Include(s => s.ProductSales)
+                  .FirstAsync(s => s.Id == id);
 
-      var Sale = await _dbContext.Sales.FindAsync(id);
-
-      if (Sale == null)
+      if (idSale == null)
       {
         return NotFound();
       }
 
-      return Ok(Sale);
+      var sale = FixSaleJSON(idSale);
+
+      return Ok(sale);
     }
 
     // POST: api/Sale
     [HttpPost]
     public async Task<ActionResult<Sale>> PostSale(SaleDTO sale)
     {
-      if(sale.Seller_Id == null || sale.Sale_Date == null) return NotFound();
+      if(sale.Seller_Id == null || sale.Sale_Date == null || sale.ProductSaleDTOs == null) return NotFound();
 
       var newSale = new Sale()
       {
@@ -94,7 +78,22 @@ namespace APISale.Controllers
         Event_Id=sale.Event_Id,
         Seller_Id=sale.Seller_Id
       };
+      
 
+      var newProductSales = new List<ProductSale>();
+
+      foreach (var productSale in sale.ProductSaleDTOs)
+      {
+        newProductSales.Add(new ProductSale()
+        {
+          Id=GetNewUuid(),
+          ProductId=productSale.ProductID,
+          SaleId=newSale.Id,
+          ProductQuantity=productSale.ProductSalesQuantity
+        });
+      }
+
+      _dbContext.ProductsSales.AddRange(newProductSales);
       _dbContext.Sales.Add(newSale);
       await _dbContext.SaveChangesAsync();
 
@@ -153,6 +152,46 @@ namespace APISale.Controllers
     private bool SaleExists(string id)
     {
       return _dbContext.Sales!.Any(e => e.Id == id);
+    }
+
+    private static object FixSaleJSON(Sale sale)
+    {
+      var fixedSale = new 
+      {
+        sale.Id,
+        sale.Sale_Date,
+        sale.Value,
+
+        Client = sale.Client != null ? new {
+          sale.Client.Id,
+          sale.Client.Name,
+          sale.Client.Cpf,
+          sale.Client.Purchases_Quantity
+        }: null,
+
+        Seller = sale.Seller != null ? new {
+          sale.Seller.Id,
+          sale.Seller.Name,
+          sale.Seller.Cpf,
+          sale.Seller.Sales_Quantity
+        }: null,
+
+        Event = sale.Event != null ? new {
+          sale.Event.Id,
+          sale.Event.Name,
+          sale.Event.Event_Date,
+          sale.Event.Sales_Quantity
+        } : null,
+
+        // Products = sale.ProductSales?.Select(ps => new
+        // {
+        //   ps.Product.Id,
+        //   ps.Product.Size,
+        //   ps.Product.Condition
+        // })
+      };
+
+      return fixedSale;
     }
   }
 }
