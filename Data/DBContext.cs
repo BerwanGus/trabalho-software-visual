@@ -14,6 +14,27 @@ public class DBContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("DataSource=inventario.db;Cache=Shared");
+        optionsBuilder.UseSqlite("DataSource=Back2youDB.db;Cache=Shared");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Event>()
+            .HasMany(e => e.Sales)
+            .WithOne(e => e.Event)
+            .HasForeignKey(e => e.Event_Id)
+            .HasPrincipalKey(e => e.Id);
+
+        modelBuilder.Entity<Client>()
+            .HasMany(e => e.Purchases)
+            .WithOne(e => e.Client)
+            .HasForeignKey(e => e.Client_Id)
+            .HasPrincipalKey(e => e.Id);
+
+        modelBuilder.Entity<Seller>()
+            .HasMany(e => e.Sales)
+            .WithOne(e => e.Seller)
+            .HasForeignKey(e => e.Seller_Id)
+            .HasPrincipalKey(e => e.Id);
     }
 }

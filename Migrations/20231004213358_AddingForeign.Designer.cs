@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventarioRoupasAPI.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20231003204149_UpdatingClientModel")]
-    partial class UpdatingClientModel
+    [Migration("20231004213358_AddingForeign")]
+    partial class AddingForeign
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,7 +157,7 @@ namespace InventarioRoupasAPI.Migrations
             modelBuilder.Entity("APISale.Models.Sale", b =>
                 {
                     b.HasOne("APISale.Models.Client", "Client")
-                        .WithMany("Purchases")
+                        .WithMany("Sales")
                         .HasForeignKey("Client_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -183,7 +183,7 @@ namespace InventarioRoupasAPI.Migrations
 
             modelBuilder.Entity("APISale.Models.Client", b =>
                 {
-                    b.Navigation("Purchases");
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("APISale.Models.Event", b =>

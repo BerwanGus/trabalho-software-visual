@@ -4,6 +4,7 @@ using API.Data;
 
 using APISale.Models;
 using API.Controllers;
+using API.Dto;
 
 namespace APISale.Controllers
 {
@@ -19,45 +20,84 @@ namespace APISale.Controllers
     }
 
     // GET: api/Event
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Event>>> GetEvent()
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Events is null) return NotFound();
+      var events = await _dbContext.Events
+                  .Include(ev => ev.Sales)
+                  .Select(ev => new {
+                    ev.Id,
+                    ev.Name,
+                    ev.Event_Date,
+                    ev.Sales_Quantity,
+                    Sales= ev.Sales!.Select(s => new
+                    {
+                      s.Id,
+                      s.Sale_Date,
+                      s.Value,
 
-      var Event = await _dbContext.Events.ToListAsync();
-      return Ok(Event);
+                      Seller = new {
+                        s.Seller.Id,
+                        s.Seller.Name,
+                        s.Seller.Cpf,
+                      },
+                    })
+                  })
+                  .ToListAsync();
+
+      return Ok(events);
     }
 
     // GET: api/Event/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Event>> GetEvent(string id)
+    public async Task<ActionResult<Event>> GetEventId(string id)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Events is null) return NotFound();
-
-      var Event = await _dbContext.Events.FindAsync(id);
-
-      if (Event == null)
+      var ev = await _dbContext.Events.FindAsync(id);
+      if (ev == null)
       {
         return NotFound();
       }
+      
+      var e = new
+      {
+        ev.Id,
+        ev.Name,
+        ev.Event_Date,
+        ev.Sales_Quantity,
+        Sales= ev.Sales!.Select(s => new
+        {
+          s.Id,
+          s.Sale_Date,
+          s.Value,
 
-      return Ok(Event);
+          Seller = new {
+            s.Seller.Id,
+            s.Seller.Name,
+            s.Seller.Cpf,
+          },
+        })
+      };
+
+      return Ok(e);
     }
 
     // POST: api/Event
     [HttpPost]
-    public async Task<ActionResult<Event>> PostEvent(Event Event)
+    public async Task<ActionResult<Event>> PostEvent(EventDTO eventDTO)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Events is null) return NotFound();
+      if (eventDTO.Event_Date == null || eventDTO.Name == null ) return NotFound();
 
-      _dbContext.Events.Add(Event);
+      var newEvent = new Event()
+      {
+        Id=GetNewUuid(),
+        Name=eventDTO.Name,
+        Sales_Quantity=eventDTO.Sales_Quantity
+      };
+
+      _dbContext.Events.Add(newEvent);
       await _dbContext.SaveChangesAsync();
 
-      return CreatedAtAction("GetEvent", new { id = Event.Id }, Event);
+      return CreatedAtAction("PostEvent", new { id = newEvent.Id }, newEvent);
     }
 
     // PUT: api/Event/5

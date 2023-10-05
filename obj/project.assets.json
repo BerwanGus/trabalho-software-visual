@@ -7540,19 +7540,19 @@
     ]
   },
   "packageFolders": {
-    "/home/alekk/.nuget/packages/": {}
+    "C:\\Users\\srrpl\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/alekk/Documents/Facul/back2you/trabalho-software-visual/InventarioRoupasAPI.csproj",
+      "projectUniqueName": "c:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
       "projectName": "InventarioRoupasAPI",
-      "projectPath": "/home/alekk/Documents/Facul/back2you/trabalho-software-visual/InventarioRoupasAPI.csproj",
-      "packagesPath": "/home/alekk/.nuget/packages/",
-      "outputPath": "/home/alekk/Documents/Facul/back2you/trabalho-software-visual/obj/",
+      "projectPath": "c:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
+      "packagesPath": "C:\\Users\\srrpl\\.nuget\\packages\\",
+      "outputPath": "c:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/alekk/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\srrpl\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -7626,7 +7626,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.111/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
