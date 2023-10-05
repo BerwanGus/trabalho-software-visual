@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventarioRoupasAPI.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231004213358_AddingForeign")]
+    partial class AddingForeign
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -30,8 +33,8 @@ namespace InventarioRoupasAPI.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Purchases_Quantity")
-                        .HasColumnType("INTEGER");
+                    b.Property<float>("Purchases_Quantity")
+                        .HasColumnType("REAL");
 
                     b.Property<DateTime>("Register_Date")
                         .HasColumnType("TEXT");
@@ -154,7 +157,7 @@ namespace InventarioRoupasAPI.Migrations
             modelBuilder.Entity("APISale.Models.Sale", b =>
                 {
                     b.HasOne("APISale.Models.Client", "Client")
-                        .WithMany("Purchases")
+                        .WithMany("Sales")
                         .HasForeignKey("Client_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -180,7 +183,7 @@ namespace InventarioRoupasAPI.Migrations
 
             modelBuilder.Entity("APISale.Models.Client", b =>
                 {
-                    b.Navigation("Purchases");
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("APISale.Models.Event", b =>

@@ -1,9 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using APISale.Models;
 using API.Controllers;
+using API.Dto;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace APISale.Controllers
 {
@@ -26,8 +32,35 @@ namespace APISale.Controllers
       if (_dbContext is null) return NotFound();
       if (_dbContext.Sales is null) return NotFound();
 
-      var Sale = await _dbContext.Sales.ToListAsync();
-      return Ok(Sale);
+      var sales = await _dbContext.Sales
+                        .Include(s => s.Client)
+                        .Include(s => s.Event)
+                        .Include(s => s.Seller)
+                        .Select(s => new {
+                          s.Id,
+                          s.Sale_Date,
+                          s.Value,
+
+                          Seller = new {
+                            s.Seller.Id,
+                            s.Seller.Name,
+                            s.Seller.Cpf,
+                          },
+                          Client = new {
+                            s.Client.Id,
+                            s.Client.Name,
+                            s.Client.Cpf,
+                          },
+                          Event = new {
+                            s.Event.Id,
+                            s.Event.Name,
+                            s.Event.Event_Date,
+                            s.Event.Sales_Quantity
+                          }
+                        })
+                        .ToListAsync();
+
+      return Ok(sales);
     }
 
     // GET: api/Sale/5
@@ -49,15 +82,23 @@ namespace APISale.Controllers
 
     // POST: api/Sale
     [HttpPost]
-    public async Task<ActionResult<Sale>> PostSale(Sale sale)
+    public async Task<ActionResult<Sale>> PostSale(SaleDTO sale)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Sales is null) return NotFound();
+      if(sale.Seller_Id == null || sale.Sale_Date == null) return NotFound();
 
-      _dbContext.Sales.Add(sale);
+      var newSale = new Sale()
+      {
+        Id=GetNewUuid(),
+        Value=sale.Value,
+        Client_Id=sale.Client_Id,
+        Event_Id=sale.Event_Id,
+        Seller_Id=sale.Seller_Id
+      };
+
+      _dbContext.Sales.Add(newSale);
       await _dbContext.SaveChangesAsync();
 
-      return CreatedAtAction("GetSale", new { id = sale.Id }, sale);
+      return CreatedAtAction("PostSale", new { id = newSale.Id }, newSale);
     }
 
     // PUT: api/Sale/5

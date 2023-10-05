@@ -15,5 +15,5 @@ public class Event
     // ---- DEFAULT VALUE -> 0
     public required float Sales_Quantity { get; set; }
 
-    public ICollection<Sale>? Sales { get; set; }
+    public virtual ICollection<Sale>? Sales { get; set; }
 }

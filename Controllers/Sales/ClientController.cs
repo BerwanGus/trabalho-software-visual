@@ -4,6 +4,9 @@ using API.Data;
 
 using APISale.Models;
 using API.Controllers;
+using API.Dto;
+using Microsoft.VisualBasic;
+using Microsoft.OpenApi.Any;
 
 namespace APISale.Controllers
 {
@@ -19,77 +22,149 @@ namespace APISale.Controllers
     }
 
     // GET: api/Client
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Client>>> GetClient()
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Clients is null) return NotFound();
+      var client = await _dbContext.Clients
+                  .Include(c => c.Purchases)
+                  .Select(c => new {
+                    c.Id,
+                    c.Name,
+                    c.Cpf,
+                    c.Register_Date,
+                    c.Purchases_Quantity,
+                    Purchases= c.Purchases!.Select(s => new
+                    {
+                      s.Id,
+                      s.Sale_Date,
+                      s.Value,
 
-      var Client = await _dbContext.Clients.ToListAsync();
-      return Ok(Client);
+                      Seller = new {
+                        s.Seller.Id,
+                        s.Seller.Name,
+                        s.Seller.Cpf,
+                      },
+                      Client = new {
+                        s.Client.Id,
+                        s.Client.Name,
+                        s.Client.Cpf,
+                      },
+                      Event = new {
+                        s.Event.Id,
+                        s.Event.Name,
+                        s.Event.Event_Date,
+                        s.Event.Sales_Quantity
+                      }
+                    })
+                  })
+                  .ToListAsync();
+
+      return Ok(client);
     }
 
     // GET: api/Client/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Client>> GetClient(string id)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Clients is null) return NotFound();
-
-      var Client = await _dbContext.Clients.FindAsync(id);
-
-      if (Client == null)
+      var c = await _dbContext.Clients.FindAsync(id);
+      if (c == null)
       {
         return NotFound();
       }
 
-      return Ok(Client);
+      var client = new
+      {
+        c.Id,
+        c.Name,
+        c.Cpf,
+        c.Register_Date,
+        c.Purchases_Quantity,
+        Purchases= c.Purchases!.Select(s => new
+        {
+          s.Id,
+          s.Sale_Date,
+          s.Value,
+
+          Seller = new {
+            s.Seller.Id,
+            s.Seller.Name,
+            s.Seller.Cpf,
+          },
+          Client = new {
+            s.Client.Id,
+            s.Client.Name,
+            s.Client.Cpf,
+          },
+          Event = new {
+            s.Event.Id,
+            s.Event.Name,
+            s.Event.Event_Date,
+            s.Event.Sales_Quantity
+          }
+        })
+      };
+
+      return Ok(client);
     }
 
     // POST: api/Client
-    // [HttpPost]
-    // public async Task<ActionResult<Client>> PostClient(string name, string cpf)
-    // {
-    //   if (_dbContext is null) return NotFound();
-    //   if (_dbContext.Clients is null) return NotFound();
+    [HttpPost]
+    public async Task<ActionResult> PostClient(ClientDTO clientDto)
+    {
+      if (clientDto.Cpf == null || clientDto.Name == null ) return NotFound();
 
-    //   string id = GetNewUuid();
-    //   DateTime datenow = DateTime.Now;
+      var client = new Client()
+      {
+        Id=GetNewUuid(),
+        Name=clientDto.Name,
+        Cpf=clientDto.Cpf,
+        Register_Date=DateTime.Now,
+        Purchases_Quantity=0
+      };
 
-    //   Client client = Client(id, name, cpf, datenow, 0, null);
+      _dbContext.Clients.Add(client);
+      await _dbContext.SaveChangesAsync();
 
-    //   _dbContext.Clients.Add(Client);
-    //   await _dbContext.SaveChangesAsync();
+      return CreatedAtAction("GetClient", new { id = client.Id }, client);
+    }
 
-    //   return CreatedAtAction("GetClient", new { id = Client.Id }, Client);
-    // }
-
+    // --------------------> CHATGPT 
     // PUT: api/Client/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutClient(string id, Client Client)
+    public async Task<IActionResult> PutClient(string id, ClientDTO clientDto)
     {
-      if (id != Client.Id)
+      var client = await _dbContext.Clients.FindAsync(id);
+
+      if (client == null)
       {
-        return BadRequest();
+          return NotFound();
       }
 
-      _dbContext.Entry(Client).State = EntityState.Modified;
+      if (clientDto.Name != null)
+      {
+          client.Name = clientDto.Name;
+      }
+
+      if (clientDto.Cpf != null)
+      {
+          client.Cpf = clientDto.Cpf;
+      }
 
       try
       {
-        await _dbContext.SaveChangesAsync();
+          _dbContext.Update(client);
+          await _dbContext.SaveChangesAsync();
       }
       catch (DbUpdateConcurrencyException)
       {
-        if (!ClientExists(id))
-        {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
+          if (!ClientExists(id))
+          {
+              return NotFound();
+          }
+          else
+          {
+              throw;
+          }
       }
 
       return NoContent();
@@ -99,16 +174,22 @@ namespace APISale.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteClient(string id)
     {
-      if (_dbContext is null) return NotFound();
-      if (_dbContext.Clients is null) return NotFound();
-
-      var Client = await _dbContext.Clients.FindAsync(id);
-      if (Client == null)
+      var client = await _dbContext.Clients.FindAsync(id);
+      if (client == null)
       {
         return NotFound();
       }
 
-      _dbContext.Clients.Remove(Client);
+      var client_purchases = (from sales in _dbContext.Sales
+                              where sales.Client_Id == id
+                              select sales).ToList();
+
+      foreach (var c in client_purchases)
+      {
+        c.Client_Id = null;
+      } 
+
+      _dbContext.Clients.Remove(client);
       await _dbContext.SaveChangesAsync();
 
       return NoContent();

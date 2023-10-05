@@ -17,11 +17,12 @@ public class Sale
     public required string Event_Id { get; set; }
 
     [ForeignKey("Client_Id")]
-    public Client? Client {get; set; }
+    public virtual Client Client {get; set; }
 
     [ForeignKey("Seller_Id")]
-    public Seller? Seller {get; set; }
+    public virtual Seller Seller {get; set; }
 
     [ForeignKey("Event_Id")]
-    public Event? Event {get; set; }
+    public virtual Event Event {get; set; }
 }
+
