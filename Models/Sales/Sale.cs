@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Models;
 
 namespace APISale.Models;
 
@@ -24,5 +25,7 @@ public class Sale
 
     [ForeignKey("Event_Id")]
     public virtual Event Event {get; set; }
+
+    public virtual ICollection<ProductSale>? ProductSales {get; set; }
 }
 
