@@ -1,4 +1,5 @@
 namespace API.Dto;
+// CHATGPT
 
 public class ClientDTO
 {
@@ -21,8 +22,9 @@ public class SellerDTO
 
 public class SaleDTO
 {
+  // atualizar para calcular automatico
   public float Value { get; set; }
-  public DateTime? Sale_Date { get; set; }
+  public DateTime Sale_Date { get; set; }
 
   public string? Client_Id { get; set; }
   public string? Seller_Id { get; set; }
@@ -36,12 +38,6 @@ public class ProductSaleDTO
   public required string ProductID { get; set; }
   public required int ProductSalesQuantity { get; set; }
 }
-public class SellerDTO
-{
-  public string? Name { get; set; }
-  public string? Cpf { get; set; }
-}
-
 
 //Products DTO:
 public class ProductTypeDTO
@@ -60,7 +56,6 @@ public class ProductDTO
 {
   public string? Size { get; set; }
   public string? Gender { get; set; }
-  public string? Style { get; set; }
   public string? Condition { get; set; }
   public float Cost { get; set; }
   public float Price { get; set; }

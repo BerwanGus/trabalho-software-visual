@@ -37,6 +37,11 @@ namespace APISale.Controllers
                         .Include(s => s.Event)
                         .Include(s => s.Seller)
                         .Include(s => s.ProductSales)
+                        .ThenInclude(s => s.Product)
+                        .ThenInclude(s => s.Brand)
+                        .Include(s => s.ProductSales)
+                        .ThenInclude(s => s.Product)
+                        .ThenInclude(s => s.ProductType)
                         .Select(s => FixSaleJSON(s))
                         .ToListAsync();
 
@@ -76,7 +81,8 @@ namespace APISale.Controllers
         Value=sale.Value,
         Client_Id=sale.Client_Id,
         Event_Id=sale.Event_Id,
-        Seller_Id=sale.Seller_Id
+        Seller_Id=sale.Seller_Id,
+        Sale_Date=sale.Sale_Date
       };
       
 
@@ -102,32 +108,41 @@ namespace APISale.Controllers
 
     // PUT: api/Sale/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutSale(string id, Sale sale)
+    public async Task<IActionResult> PutSale(string id, SaleDTO sale)
     {
-      if (id != sale.Id)
-      {
-        return BadRequest();
-      }
+      if(sale.Seller_Id == null || sale.Sale_Date == null || sale.ProductSaleDTOs == null) return NotFound();
 
-      _dbContext.Entry(sale).State = EntityState.Modified;
+      var oldSale = await _dbContext.Sales.FindAsync(id);
 
-      try
+      if (oldSale == null) return NotFound();
+
+      oldSale.Value = sale.Value;
+      oldSale.Sale_Date = sale.Sale_Date;
+
+      if (sale.Client_Id != null) oldSale.Client_Id = sale.Client_Id;
+      if (sale.Seller_Id != null) oldSale.Seller_Id = sale.Seller_Id;
+      if (sale.Event_Id != null) oldSale.Event_Id = sale.Event_Id;
+
+      _dbContext.ProductsSales.RemoveRange(_dbContext.ProductsSales.Where(ps => ps.SaleId == id));
+
+      
+      var updatedProductSales = new List<ProductSale>();
+
+      foreach (var productSale in sale.ProductSaleDTOs)
       {
-        await _dbContext.SaveChangesAsync();
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        if (!SaleExists(id))
+        updatedProductSales.Add(new ProductSale()
         {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
+          Id=GetNewUuid(),
+          ProductId=productSale.ProductID,
+          SaleId=id,
+          ProductQuantity=productSale.ProductSalesQuantity
+        });
       }
 
-      return NoContent();
+      _dbContext.ProductsSales.AddRange(updatedProductSales);
+      await _dbContext.SaveChangesAsync();
+
+      return CreatedAtAction("UpdateSale", new { id = oldSale.Id }, oldSale);
     }
 
     // DELETE: api/Sale/5
@@ -149,11 +164,6 @@ namespace APISale.Controllers
       return NoContent();
     }
 
-    private bool SaleExists(string id)
-    {
-      return _dbContext.Sales!.Any(e => e.Id == id);
-    }
-
     private static object FixSaleJSON(Sale sale)
     {
       var fixedSale = new 
@@ -161,6 +171,7 @@ namespace APISale.Controllers
         sale.Id,
         sale.Sale_Date,
         sale.Value,
+        profit=sale.Value - sale.ProductSales?.Sum(ps => ps.Product?.Cost * ps.ProductQuantity),
 
         Client = sale.Client != null ? new {
           sale.Client.Id,
@@ -183,12 +194,17 @@ namespace APISale.Controllers
           sale.Event.Sales_Quantity
         } : null,
 
-        // Products = sale.ProductSales?.Select(ps => new
-        // {
-        //   ps.Product.Id,
-        //   ps.Product.Size,
-        //   ps.Product.Condition
-        // })
+        Products = sale.ProductSales?.Select(ps => new
+        {
+          ps.Product?.Id,
+          ps.Product?.Size,
+          ps.Product?.Cost,
+          ps.Product?.Price,
+          brandName=ps.Product.Brand.Name,
+          productType=ps.Product.ProductType.TypeName + " " + ps.Product.ProductType.Style,
+          ps.ProductQuantity,
+          productProfit=ps.Product?.Price - ps.Product?.Cost
+        })
       };
 
       return fixedSale;
