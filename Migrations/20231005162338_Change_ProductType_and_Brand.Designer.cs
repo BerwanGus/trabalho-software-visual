@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventarioRoupasAPI.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231005162338_Change_ProductType_and_Brand")]
+    partial class Change_ProductType_and_Brand
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -134,12 +137,10 @@ namespace InventarioRoupasAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Brand_Id")
-                        .IsRequired()
+                    b.Property<string>("BrandId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Color")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Condition")
@@ -160,15 +161,10 @@ namespace InventarioRoupasAPI.Migrations
                     b.Property<string>("Style")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type_Id")
-                        .IsRequired()
+                    b.Property<string>("TypeId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Brand_Id");
-
-                    b.HasIndex("Type_Id");
 
                     b.ToTable("Products");
                 });
@@ -218,25 +214,6 @@ namespace InventarioRoupasAPI.Migrations
                     b.Navigation("Seller");
                 });
 
-            modelBuilder.Entity("APIStock.Models.Product", b =>
-                {
-                    b.HasOne("APIStock.Models.Brand", "Brand")
-                        .WithMany("Products")
-                        .HasForeignKey("Brand_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("APIStock.Models.ProductType", "ProductType")
-                        .WithMany("Products")
-                        .HasForeignKey("Type_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("ProductType");
-                });
-
             modelBuilder.Entity("APISale.Models.Client", b =>
                 {
                     b.Navigation("Purchases");
@@ -250,16 +227,6 @@ namespace InventarioRoupasAPI.Migrations
             modelBuilder.Entity("APISale.Models.Seller", b =>
                 {
                     b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("APIStock.Models.Brand", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("APIStock.Models.ProductType", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

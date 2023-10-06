@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using APIStock.Models;
 using API.Data;
+using API.Dto;
+using API.Controllers;
 
 namespace APIStock.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class ProductController : ControllerBase
+  public class ProductController : Back2youControllerBase
   {
     private readonly DBContext _dbContext;
 
@@ -44,17 +46,31 @@ namespace APIStock.Controllers
 
     // POST: api/Product
     [HttpPost]
-    public async Task<ActionResult<Product>> PostProduct(Product product)
+    public async Task<ActionResult<Product>> PostProduct(ProductDTO product)
     {
-      _dbContext.Products.Add(product);
+      var newProd = new Product()
+      {
+        Id = GetNewUuid(),
+        Size = product.Size,
+        Gender = product.Gender,
+        Style = product.Style,
+        Condition = product.Condition,
+        Cost = product.Cost,
+        Price = product.Price,
+        Color = product.Color,
+        Brand_Id = product.Brand_Id,
+        Type_Id = product.Type_Id
+      };
+
+      _dbContext.Products.Add(newProd);
       await _dbContext.SaveChangesAsync();
 
-      return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+      return CreatedAtAction("PostProduct", new { id = newProd.Id }, newProd);
     }
 
     // PUT: api/Product/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutProduct(int id, Product product)
+    public async Task<IActionResult> PutProduct(string id, Product product)
     {
       if (id != product.Id)
       {
@@ -98,7 +114,7 @@ namespace APIStock.Controllers
       return NoContent();
     }
 
-    private bool ProductExists(int id)
+    private bool ProductExists(string id)
     {
       return _dbContext.Products.Any(e => e.Id == id);
     }

@@ -1,12 +1,15 @@
 using APISale.Models;
 using APIStock.Models;
 using API.Models;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
 public class DBContext : DbContext
 {
+
+    public DbSet<ProductType> ProductTypes { get; set; }
+    public DbSet<Brand> Brands { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Sale> Sales { get; set; }
     public DbSet<Client> Clients { get; set; }
