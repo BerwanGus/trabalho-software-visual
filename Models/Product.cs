@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using API.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APIStock.Models;
@@ -22,4 +23,6 @@ public class Product
 
     [ForeignKey("Type_Id")]
     public virtual ProductType ProductType { get; set; }
+
+    public virtual ICollection<ProductSale>? ProductSales { get; set; }
 }
