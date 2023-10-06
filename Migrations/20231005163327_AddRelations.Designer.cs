@@ -3,6 +3,7 @@ using System;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventarioRoupasAPI.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20231005163327_AddRelations")]
+    partial class AddRelations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.11");
@@ -134,7 +137,7 @@ namespace InventarioRoupasAPI.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Brand_Id")
+                    b.Property<string>("BrandId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -154,21 +157,24 @@ namespace InventarioRoupasAPI.Migrations
                     b.Property<float>("Price")
                         .HasColumnType("REAL");
 
+                    b.Property<string>("ProductTypeId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Size")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Style")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Type_Id")
+                    b.Property<string>("TypeId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Brand_Id");
+                    b.HasIndex("BrandId");
 
-                    b.HasIndex("Type_Id");
+                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Products");
                 });
@@ -220,21 +226,15 @@ namespace InventarioRoupasAPI.Migrations
 
             modelBuilder.Entity("APIStock.Models.Product", b =>
                 {
-                    b.HasOne("APIStock.Models.Brand", "Brand")
+                    b.HasOne("APIStock.Models.Brand", null)
                         .WithMany("Products")
-                        .HasForeignKey("Brand_Id")
+                        .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("APIStock.Models.ProductType", "ProductType")
+                    b.HasOne("APIStock.Models.ProductType", null)
                         .WithMany("Products")
-                        .HasForeignKey("Type_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("ProductType");
+                        .HasForeignKey("ProductTypeId");
                 });
 
             modelBuilder.Entity("APISale.Models.Client", b =>
