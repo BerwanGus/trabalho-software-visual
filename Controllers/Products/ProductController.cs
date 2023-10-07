@@ -53,7 +53,6 @@ namespace APIStock.Controllers
         Id = GetNewUuid(),
         Size = product.Size,
         Gender = product.Gender,
-        Style = product.Style,
         Condition = product.Condition,
         Cost = product.Cost,
         Price = product.Price,
