@@ -8,4 +8,5 @@ Software em C# para gerenciamento de inventário e vendas de um brechó.
 Iniciar serviço:
 `dotnet run --launch-profile https`
 
-![Diagrama Brecho](https://github.com/BerwanGus/trabalho-software-visual/assets/74881040/e49ecf2c-5f82-4b71-b5ed-d372c45b648c)
+
+![Diagrama Brecho](https://github.com/BerwanGus/trabalho-software-visual/assets/74881040/cb9122ba-5ed6-400b-aec8-d0df8f130d31)
