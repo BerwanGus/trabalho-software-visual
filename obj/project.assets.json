@@ -7540,19 +7540,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gabri\\.nuget\\packages\\": {}
+    "C:\\Users\\srrpl\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
+      "projectUniqueName": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
       "projectName": "InventarioRoupasAPI",
-      "projectPath": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
-      "packagesPath": "C:\\Users\\gabri\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\gabri\\Desktop\\PC\\Faculdade\\4 sem\\CSharp\\trabalho-software-visual\\obj\\",
+      "projectPath": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
+      "packagesPath": "C:\\Users\\srrpl\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\gabri\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\srrpl\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
@@ -7626,7 +7626,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }

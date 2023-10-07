@@ -140,7 +140,8 @@ namespace APISale.Controllers
     {
       return _dbContext.Clients!.Any(e => e.Id == id);
     }
-  
+
+    // chatgpt
     private static object FixClientJSON(Client client)
     {
       var fixedClient = new

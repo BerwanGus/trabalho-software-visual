@@ -16,9 +16,9 @@ public class ProductSale
     public required string SaleId { get; set; }
 
     [ForeignKey("ProductId")]
-    public virtual Product? Product { get; set; }
+    public virtual Product Product { get; set; }
 
     [ForeignKey("SaleId")]
-    public virtual Sale? Sale { get; set; }
+    public virtual Sale Sale { get; set; }
 }
 
