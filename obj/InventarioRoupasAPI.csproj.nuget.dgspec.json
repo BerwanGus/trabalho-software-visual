@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj": {}
+    "/home/gustavo/Documents/Pessoal/Faculdade/software visual/trabalho-software-visual/InventarioRoupasAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj": {
+    "/home/gustavo/Documents/Pessoal/Faculdade/software visual/trabalho-software-visual/InventarioRoupasAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
+        "projectUniqueName": "/home/gustavo/Documents/Pessoal/Faculdade/software visual/trabalho-software-visual/InventarioRoupasAPI.csproj",
         "projectName": "InventarioRoupasAPI",
-        "projectPath": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\InventarioRoupasAPI.csproj",
-        "packagesPath": "C:\\Users\\srrpl\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\srrpl\\Documents\\Facul\\trabalho-software-visual\\obj\\",
+        "projectPath": "/home/gustavo/Documents/Pessoal/Faculdade/software visual/trabalho-software-visual/InventarioRoupasAPI.csproj",
+        "packagesPath": "/home/gustavo/.nuget/packages/",
+        "outputPath": "/home/gustavo/Documents/Pessoal/Faculdade/software visual/trabalho-software-visual/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\srrpl\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/gustavo/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -88,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/7.0.401/RuntimeIdentifierGraph.json"
         }
       }
     }
