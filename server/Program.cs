@@ -20,6 +20,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(opcoes => opcoes
+    .WithOrigins("http://localhost:3000") // endereço do front
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials());
+
 app.UseAuthorization();
 
 app.MapControllers();
