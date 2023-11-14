@@ -87,9 +87,12 @@ namespace APISale.Controllers
       
 
       var newProductSales = new List<ProductSale>();
+      // var value = 0;
 
       foreach (var productSale in sale.ProductSaleDTOs)
       {
+        // value += productSale.
+
         newProductSales.Add(new ProductSale()
         {
           Id=GetNewUuid(),
