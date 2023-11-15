@@ -1,38 +1,39 @@
-'use client';
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { SalesList } from '@/app/components/SalesList';
 import { MainHeader } from '@/app/components/Header';
+import { AddSalePopup } from '@/app/components/AddSale';
+import { useApi } from '@/app/context/api.context';
 
 export default function Home() {
-  const [ sales, setSales ] = useState<SaleProps[] | undefined>(undefined)
+  const { sales, isLoading } = useApi()
+
   const [ table, setTable ] = useState<number>(0)
-  const [ isLoading, setIsLoading ] = useState<boolean>(true)
 
   const links = [
     {
-      name: 'Sales',
+      name: 'Vendas',
       handle: () => handleTableState(0)
     },
     {
-      name: 'Products',
+      name: 'Produtos',
       handle: () => handleTableState(1)
     },
     {
-      name: 'Brands',
+      name: 'Marcas',
       handle: () => handleTableState(2)
     },
     {
-      name: 'Clients',
+      name: 'Clientes',
       handle: () => handleTableState(3)
     },
     {
-      name: 'Sellers',
+      name: 'Vendedores',
       handle: () => handleTableState(4)
     },
     {
-      name: 'Events',
+      name: 'Eventos',
       handle: () => handleTableState(5)
     },
   ]
@@ -77,23 +78,6 @@ export default function Home() {
       }
     }
   }
-
-  function getProducts() {
-    axios.get("http://localhost:5251/api/Sale")
-      .then(res => {
-        console.log(res.data)
-        setSales(res.data)
-        setIsLoading(false)
-      })
-      .catch(err => {
-        setIsLoading(false)
-        console.log(err)
-      })
-  }
-  
-  useEffect(() => {
-    getProducts()
-  }, [])
   
   return (
     <>
@@ -101,9 +85,10 @@ export default function Home() {
       <main className="flex flex-col items-center justify-between p-24 h-full">
         {
           isLoading ? <h1>Carregando</h1>
-          : sales ? handleTable()
-          : <div>Error</div> 
+          : sales.length > 0 ? handleTable()
+          : <div>Error</div>
         }
+        <AddSalePopup />
       </main> 
     </>
   )

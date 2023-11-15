@@ -4,7 +4,7 @@ interface SalesListProps{
   sales: SaleProps[],
 }
 
-export function SalesList({sales}: SalesListProps) {
+export function SalesList({sales}: SalesListProps) { 
   return (
     <div className="flex flex-col bg-body-white rounded-xl border-accent border-2 w-full px-4 py-8 text-center shadow-lg">
       <div className="flex font-bold text-accent lowercase">

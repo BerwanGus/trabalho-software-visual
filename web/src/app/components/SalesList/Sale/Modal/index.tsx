@@ -7,7 +7,7 @@ interface ModalComponentProps {
 
 export function SaleModal({sale, handleIsModalOpen}: ModalComponentProps) {
   return (
-    <div className='flex flex-col bg-body-white text-left w-1/4 border-accent border-l-2 absolute h-full top-0 right-0 z-50 drop-shadow-lg p-8'>
+    <div id='modal' className='absolute flex flex-col bg-body-white text-left w-1/4 border-accent border-l-2 top-0 right-0 z-50 drop-shadow-lg p-8'>
       {/* HEADER */}
       <div className='mb-10'>
         <X
