@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface MainHeaderProps {
   functions: {
     name: string;
@@ -24,7 +26,7 @@ export function MainHeader({functions}: MainHeaderProps) {
             )
           }
         </div>
-        <a className='cursor-pointer hover:opacity-80 transition-all' href="#">Logo</a>
+        <Link className='cursor-pointer hover:opacity-80 transition-all' href="/">Logo</Link>
       </nav>
     </header>
   )

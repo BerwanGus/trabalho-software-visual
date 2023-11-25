@@ -54,28 +54,7 @@ export default function AddSale() {
   };
   
   // -------------------------------------------------------------------------------------------------------<
-
-
-  const initProduct: ProductProps = {
-    brand: {
-      id: '',
-      name: ''
-    },
-    brand_Id: '',
-    color: '',
-    condition: '',
-    cost: 0,
-    gender: '',
-    id: '',
-    price: 0,
-    size: '',
-    productType: {
-      id: '',
-      style: '',
-      typeName: ''
-    },
-    type_Id: ''
-  }
+  
 
   const { clients, events, products, sales, sellers } = useApi()
   
@@ -170,10 +149,10 @@ export default function AddSale() {
   }
 
   // -------------------------------------------------------------------------------------------------------<
-
   
   return (
     <>
+      <MainHeader functions={[]}/>
       <main className="w-full h-full p-8">
         <h1 className="font-extrabold text-accent text-6xl mb-8">ADICIONAR VENDA</h1>
         <form action="" className="flex flex-col">
@@ -265,6 +244,7 @@ export default function AddSale() {
             seller={resumeInfo.seller}
             event={resumeInfo.event}
             products={resumeInfo.products}
+            // handleCleanFields={handleCleanFields}
           />
         </form>
       </main>

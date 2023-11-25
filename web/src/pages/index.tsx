@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { SalesList } from '@/app/components/SalesList';
 import { MainHeader } from '@/app/components/Header';
 import { AddSalePopup } from '@/app/components/AddSale';

@@ -73,7 +73,11 @@ namespace APISale.Controllers
     [HttpPost]
     public async Task<ActionResult<Sale>> PostSale(SaleDTO sale)
     {
-      if(sale.Seller_Id == null || sale.Sale_Date == null || sale.ProductSaleDTOs == null) return NotFound();
+      if(sale.Seller_Id == null || sale.ProductSaleDTOs == null) return NotFound();
+
+      DateTime dateTime = DateTime.UtcNow.Date;
+
+      Console.WriteLine("Adicionando Nova venda");
 
       var newSale = new Sale()
       {
@@ -82,7 +86,7 @@ namespace APISale.Controllers
         Client_Id=sale.Client_Id,
         Event_Id=sale.Event_Id,
         Seller_Id=sale.Seller_Id,
-        Sale_Date=sale.Sale_Date
+        Sale_Date=dateTime
       };
       
 
@@ -106,7 +110,7 @@ namespace APISale.Controllers
       _dbContext.Sales.Add(newSale);
       await _dbContext.SaveChangesAsync();
 
-      return CreatedAtAction("PostSale", new { id = newSale.Id }, newSale);
+      return Ok();
     }
 
     // PUT: api/Sale/5

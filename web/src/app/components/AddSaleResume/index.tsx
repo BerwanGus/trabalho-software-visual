@@ -1,3 +1,5 @@
+import axios from "axios";
+import { redirect } from "next/navigation";
 import { forwardRef, useEffect, useState } from "react";
 
 export interface AddSaleResumeProps {
@@ -7,15 +9,61 @@ export interface AddSaleResumeProps {
   products: {
     data: ProductProps;
     qtd: string;
-    // indexes: {
-    //   index: number;
-    //   qtd: number;
-    // }[]
   }[]
+}
+
+interface ProductSaleDTO {
+  productID: string;
+  productSalesQuantity: number;
+}
+
+interface SalePostProps  {
+  value: number;
+  client_id: string;
+  event_id: string;
+  seller_id: string;
+  sale_Date: Date;
+  productSaleDTOs: ProductSaleDTO[];
 }
 
 export function AddSaleResume({ client, seller, event, products }: AddSaleResumeProps) {
   const [ isCreateButtonDisabled, setIsCreateButtonDisabled ] = useState<boolean>(true)
+
+  useEffect(() => {
+    if (client && seller && event && products.length > 0) setIsCreateButtonDisabled(false)
+    else setIsCreateButtonDisabled(true)
+
+    console.log(products)
+  }, [ client, seller, event, products ])
+
+  function handleSubmitSale(e: React.FormEvent) {
+    // e.preventDefault()
+    let finalValue = 0
+    let productSaleDTOs: ProductSaleDTO[] = []
+
+    for (const product of products) {
+      finalValue += product.data.price
+      productSaleDTOs.push({productID: product.data.id, productSalesQuantity: parseInt(product.qtd)})
+    }
+
+    const requestBody: SalePostProps = {
+      client_id: client!.id,
+      event_id: event!.id,
+      seller_id: seller!.id,
+      value: finalValue,
+      productSaleDTOs,
+      sale_Date: new Date()
+    }
+
+    axios.post("http://localhost:5251/api/Sale", requestBody)
+      .then(response => {
+        console.log('Venda cadastrada')
+        alert('Venda cadastrada')
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
   
   return (
     <div>
@@ -160,6 +208,7 @@ export function AddSaleResume({ client, seller, event, products }: AddSaleResume
         type="submit"
         className={`fixed bottom-5 right-5 bg-accent py-4 px-8 text-2xl text-body-white font-extrabold rounded-xl transition-all ${isCreateButtonDisabled ? 'opacity-50' : 'hover:opacity-80'}`}
         disabled={isCreateButtonDisabled}
+        onClick={handleSubmitSale}
       >
         CRIAR VENDA
       </button>
